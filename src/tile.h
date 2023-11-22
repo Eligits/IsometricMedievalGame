@@ -10,7 +10,9 @@ public:
     Tile(SDL_Renderer *renderer, int spriteWidth, int spriteHeight);
     ~Tile();
     Vector2 to_screen_coordinate(Vector2 tile);
-    void SpawnTile(int spriteSizeX, int spriteSizeY);
+    void SpawnTileChunk(int spriteSizeX, int spriteSizeY);
+    void mainMouseLoop(SDL_Event e);
+    Vector2 mouseOverGridCoord;
 private:
     SDL_Surface  *tileFile = NULL;
     SDL_Texture  *texture = NULL;

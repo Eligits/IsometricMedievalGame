@@ -11,6 +11,7 @@ int spriteHeight = 64;
 const int SCREEN_HEIGHT = 1080;
 const int SCREEN_WIDTH = 1920;
 
+
 int main(void) {
     // Set SDL Window and SDL Renderer
     SDL_Renderer *renderer = NULL;
@@ -23,14 +24,22 @@ int main(void) {
 
     // Create the Tile object
     Tile tile(renderer, spriteWidth, spriteHeight);
-    tile.SpawnTile(SCREEN_WIDTH, SCREEN_HEIGHT);
+    tile.SpawnTileChunk(SCREEN_WIDTH, SCREEN_HEIGHT);
 
     // Game loop
-    SDL_Event event;
-    while (1) {
-        if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
-            break;
+    SDL_Event e;
+    bool quit = false;
+
+    while (!quit) {
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_QUIT) {
+                quit = true;
+            } else if (e.type == SDL_MOUSEMOTION) {
+                tile.mainMouseLoop(e);
+            }
+        }
     }
+    
 
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
