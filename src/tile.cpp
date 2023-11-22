@@ -15,10 +15,10 @@ Tile::Tile(SDL_Renderer *renderer, int spriteWidth, int spriteHeight) {
     this->renderer = renderer;
     this->spriteWidth = spriteWidth;
     this->spriteHeight = spriteHeight;
-    tilePos.x = 1;
-    tilePos.y = 1;
-    tilePos.w = spriteWidth;
-    tilePos.h = spriteHeight;
+    tile_Pos_Size.x = 0;
+    tile_Pos_Size.y = 0;
+    tile_Pos_Size.w = spriteWidth;
+    tile_Pos_Size.h = spriteHeight;
 }
 
 Vector2 Tile::to_screen_coordinate(Vector2 tile) {
@@ -29,33 +29,22 @@ Vector2 Tile::to_screen_coordinate(Vector2 tile) {
 };
 
 
-void Tile::SpawnTile(int x, int y, int spriteWidth, int spriteHeight) {
-    double testX = (tilePos.x * i_x * 0.5 * spriteWidth + tilePos.y * (1 * 0.5 * spriteWidth));
-    double testY = (tilePos.x * i_y * 0.5 * spriteHeight + tilePos.y * (j_y * 0.5 * spriteHeight));
-    // double testX = tilePos.x * i_x + tilePos.y * 1;
-    // double testY = tilePos.y * i_y + tilePos.y * j_y;
-    
-    // Vector2 screenCoord = to_screen_coordinate(Tile(i));
+void Tile::SpawnTile(int gridWidth, int gridHeight) {
+    for (int i = 0; i < gridWidth; ++i) {
+        for (int j = 0; j < gridHeight; ++j) {
+            Vector2 gridPos = {static_cast<float>(i), static_cast<float>(j)};
+            Vector2 screenCoord = to_screen_coordinate(gridPos);
+            // Create an SDL_Rect at the screen coordinates for rendering
+            tile_Pos_Size = {static_cast<int>(screenCoord.x), static_cast<int>(screenCoord.y), spriteWidth, spriteHeight};
 
-    for (int i = 0; i <= x; i += spriteWidth) {
-        SDL_RenderCopy(renderer, texture, NULL, &tilePos);
-        SDL_RenderPresent(renderer);
-        
-        for (int index = 0; index <= y; index += spriteHeight) {
-            SDL_RenderCopy(renderer, texture, NULL, &tilePos);
-            SDL_RenderPresent(renderer);
-            tilePos.y += testY;
+            SDL_RenderCopy(renderer, texture, NULL, &tile_Pos_Size);
         }
-
-    tilePos.x += testX;
-    cout << testX << endl;
-    tilePos.y = 0;
     }
-};
+    SDL_RenderPresent(renderer); // Call this once after rendering all tiles
+}
 
 Tile::~Tile() {
     SDL_DestroyTexture(texture);
     IMG_Quit();
-    SDL_DestroyRenderer(renderer);
 }
 

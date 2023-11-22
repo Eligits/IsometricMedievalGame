@@ -23,7 +23,7 @@ int main(void) {
 
     // Create the Tile object
     Tile tile(renderer, spriteWidth, spriteHeight);
-    tile.SpawnTile(SCREEN_WIDTH, SCREEN_HEIGHT, spriteWidth, spriteHeight);
+    tile.SpawnTile(SCREEN_WIDTH, SCREEN_HEIGHT);
 
     // Game loop
     SDL_Event event;
